@@ -8,6 +8,8 @@ defmodule EcoHabits.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
+    field :name, :string
+    field :bio, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -129,4 +131,12 @@ defmodule EcoHabits.Accounts.User do
     Bcrypt.no_user_verify()
     false
   end
+
+  def profile_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :bio])
+    |> validate_required([:name])
+    |> validate_length(:bio, max: 300)
+  end
+
 end

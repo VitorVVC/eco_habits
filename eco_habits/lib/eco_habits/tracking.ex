@@ -76,10 +76,11 @@ defmodule EcoHabits.Tracking do
   """
   def create_check_in(%Scope{} = scope, attrs) do
     with {:ok, check_in = %CheckIn{}} <-
-           %CheckIn{}
-           |> CheckIn.changeset(attrs, scope)
-           |> Repo.insert() do
+          %CheckIn{}
+          |> CheckIn.changeset(attrs, scope)
+          |> Repo.insert() do
       broadcast_check_in(scope, {:created, check_in})
+      Phoenix.PubSub.broadcast(EcoHabits.PubSub, "community:check_ins", {:community_check_in, check_in})
       {:ok, check_in}
     end
   end
@@ -161,4 +162,12 @@ defmodule EcoHabits.Tracking do
     |> limit(10)
     |> Repo.all()
   end
+
+  def list_community_check_ins do
+    CheckIn
+    |> order_by([c], desc: c.inserted_at)
+    |> limit(20)
+    |> Repo.all()
+  end
+
 end

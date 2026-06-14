@@ -60,6 +60,9 @@ defmodule EcoHabitsWeb.Router do
       live "/habits/:id/edit", HabitLive.Form, :edit
 
       live "/dashboard", DashboardLive, :index
+      live "/profile", ProfileLive, :index
+      live "/community", CommunityFeedLive, :index
+
     end
 
     post "/users/update-password", UserSessionController, :update_password

@@ -294,4 +294,10 @@ defmodule EcoHabits.Accounts do
       end
     end)
   end
+
+  def update_profile(%User{} = user, attrs) do
+    user
+    |> User.profile_changeset(attrs)
+    |> Repo.update()
+  end
 end
